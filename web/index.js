@@ -77,6 +77,21 @@ app.get("/api/shop", async (_req, res) => {
   res.status(200).send(shop);
 });
 
+app.put("/api/products/description", async (_req, res) => {
+  // Session is built by the OAuth process
+
+  console.log("in put");
+  const product = new shopify.api.rest.Product({
+    session: res.locals.shopify.session,
+  });
+  product.id = _req.body.id;
+  product.body_html = _req.body.body_html;
+
+  return await product.save({
+    update: true,
+  });
+});
+
 app.use(serveStatic(STATIC_PATH, { index: false }));
 
 app.use("/*", shopify.ensureInstalledOnShop(), async (_req, res, _next) => {

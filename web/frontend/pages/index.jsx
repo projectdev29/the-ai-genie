@@ -8,113 +8,114 @@ import {
   Link,
   Heading,
   Button,
+  List,
+  Banner,
 } from "@shopify/polaris";
 import { TitleBar, useNavigate } from "@shopify/app-bridge-react";
 
 import { trophyImage } from "../assets";
 
-import { ProductsCard } from "../components";
+import { ProductResourceList, ProductsCard } from "../components";
 import { useCallback, useEffect, useState } from "react";
 import { useAuthenticatedFetch } from "../hooks";
+
+import ProductStats from "../components/ProductStats";
+import { Summary } from "../components/Summary";
+import { BackendApiHelper } from "../../middleware/backendapihelper";
+import { TagsProvider } from "../components/TagsContext";
+import { useParams } from "react-router-dom";
 
 export default function HomePage() {
   const authFetch = useAuthenticatedFetch();
   const navigate = useNavigate();
   const [store, setStore] = useState({});
+  const [tagsMap, setTagsMap] = useState([]);
+  const [productCount, setProductCount] = useState(null);
+  const [showProducts, setShowProducts] = useState(false);
+  const [showBanner, setShowBanner] = useState(false);
+  const [bannerMessage, setBannerMessage] = useState(null);
+  const [bannerStatus, setBannerStatus] = useState("success");
   let shopExists = false;
+  const { dontShowMainScreen } = useParams();
 
-  useEffect(() => {
-    authFetch("/api/shop")
-      .then((response) => response.json())
-      .then((responseJson) => {
-        setStore(responseJson[0]);
-        // fetch("http://localhost:3000/api/store/" + store[0].id)
-        //   .then((storeData) => storeData.json())
-        //   .then((storeJsonData) => {
-        //     // this means first time user. lets get started should save store info
-        //     console.log("data returned from api: " + storeJsonData.result[0]);
-        //   });
-      });
+  useEffect(async () => {
+    console.log("dont show main screen: " + dontShowMainScreen);
+    if (dontShowMainScreen) {
+      setShowProducts(true);
+    }
+    const shopResponse = await authFetch("/api/shop");
+    const stores = await shopResponse.json();
+    setStore(stores[0]);
+
+    const countResponse = await authFetch("/api/products/count");
+    const countResponseJson = await countResponse.json();
+    setProductCount(countResponseJson.count);
+
+    const productsFromDb = await BackendApiHelper.doGet(
+      "/api/products/" + stores[0].id
+    );
+
+    if (productsFromDb.result) {
+      let initialTagsMap = [];
+      await Promise.all(
+        productsFromDb.result.map((productFromDb) => {
+          let tag = productFromDb.tags;
+          if (initialTagsMap[tag]) {
+            initialTagsMap[tag] =
+              initialTagsMap[tag] + "," + productFromDb.product_id.toString();
+          } else if (tag) {
+            initialTagsMap[tag] = productFromDb.product_id.toString();
+          }
+        })
+      );
+      setTagsMap(initialTagsMap);
+    }
   }, []);
 
-  const getStarted = useCallback(() => {
-    if (!shopExists) {
-      fetch("http://localhost:3000/api/store/", {
-        method: "POST",
-        body: JSON.stringify({
-          storeId: store.id,
-          name: store.name,
-          description: store.email,
-        }),
-        headers: { "Content-Type": "application/json" },
-      }).then(navigate("/allproducts", store));
-    }
+  const handleShowProducts = useCallback(() => {
+    setShowProducts(true);
+  });
+
+  const handleShowSummary = useCallback(() => {
+    setShowProducts(false);
+  });
+  const updateBanner = useCallback((message, show) => {
+    setBannerMessage(message);
+    setShowBanner(show);
   });
   return (
-    <Page narrowWidth>
-      <TitleBar title="Welcome to The Brainstormer!" primaryAction={null} />
+    <Page>
+      {showBanner ? (
+        <Banner
+          title={bannerMessage}
+          status={bannerStatus}
+          onDismiss={() => {
+            updateBanner("", false);
+          }}
+        />
+      ) : null}
+      <TitleBar primaryAction={null} />
       <Layout>
         <Layout.Section>
-          <Card sectioned>
-            <Stack
-              wrap={false}
-              spacing="extraTight"
-              distribution="trailing"
-              alignment="center"
-            >
-              <Stack.Item fill>
-                <TextContainer spacing="loose">
-                  <Heading>
-                    Generate FAQs for all your products with ease.
-                  </Heading>
-                  <p>Ready to go?</p>
-                  <Button primary onClick={getStarted}>
-                    Let's get started!
-                  </Button>
-                </TextContainer>
-              </Stack.Item>
-              <Stack.Item>
-                <div style={{ padding: "0 20px" }}>
-                  <Image
-                    source={trophyImage}
-                    alt="Welcome trophy"
-                    width={120}
-                  />
-                </div>
-              </Stack.Item>
-            </Stack>
-          </Card>
-        </Layout.Section>
-        <Layout.Section>
-          <Card sectioned>
-            <Stack
-              wrap={false}
-              spacing="extraTight"
-              distribution="trailing"
-              alignment="center"
-            >
-              <Stack.Item fill>
-                <TextContainer spacing="loose">
-                  <Heading>
-                    Generate FAQs for all your products with ease.
-                  </Heading>
-                  <p>Ready to go?</p>
-                  <Button primary onClick={getStarted}>
-                    Let's get started!
-                  </Button>
-                </TextContainer>
-              </Stack.Item>
-              <Stack.Item>
-                <div style={{ padding: "0 20px" }}>
-                  <Image
-                    source={trophyImage}
-                    alt="Welcome trophy"
-                    width={120}
-                  />
-                </div>
-              </Stack.Item>
-            </Stack>
-          </Card>
+          <TagsProvider
+            value={{ tagsMap: tagsMap, productCount: productCount }}
+          >
+            {showProducts ? (
+              <div>
+                <ProductResourceList
+                  updateBanner={updateBanner}
+                ></ProductResourceList>
+                <br />
+                <Button onClick={handleShowSummary} primary>
+                  Back
+                </Button>
+              </div>
+            ) : (
+              <div>
+                <Summary showProductHandler={handleShowProducts}></Summary>
+              </div>
+            )}
+          </TagsProvider>
         </Layout.Section>
       </Layout>
     </Page>

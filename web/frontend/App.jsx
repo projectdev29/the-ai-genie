@@ -19,12 +19,14 @@ export default function App() {
         <AppBridgeProvider>
           <QueryProvider>
             <NavigationMenu
-              navigationLinks={[
-                {
-                  label: "All Products",
-                  destination: "/allproducts",
-                },
-              ]}
+              navigationLinks={
+                [
+                  // {
+                  //   label: "All Products",
+                  //   destination: "/allproducts",
+                  // },
+                ]
+              }
             />
             <Routes pages={pages} />
           </QueryProvider>
