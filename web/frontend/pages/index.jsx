@@ -1,5 +1,5 @@
 import {
-  Card,
+  Text,
   Page,
   Layout,
   TextContainer,
@@ -20,10 +20,18 @@ import { useCallback, useEffect, useState } from "react";
 import { useAuthenticatedFetch } from "../hooks";
 
 import ProductStats from "../components/ProductStats";
-import { Summary } from "../components/Summary";
 import { BackendApiHelper } from "../../middleware/backendapihelper";
 import { TagsProvider } from "../components/TagsContext";
 import { useParams } from "react-router-dom";
+
+import { SingleProductCard } from "../components/ui/SingleProductCard";
+import {
+  ViewAllProductsCard,
+  Card,
+} from "../components/ui/ViewAllProductsCard";
+// import { ProductCard } from '../components/ui/ProductCard'
+
+import styles from "./index.module.scss";
 
 export default function HomePage() {
   const authFetch = useAuthenticatedFetch();
@@ -84,40 +92,62 @@ export default function HomePage() {
     setShowBanner(show);
   });
   return (
-    <Page>
-      {showBanner ? (
-        <Banner
-          title={bannerMessage}
-          status={bannerStatus}
-          onDismiss={() => {
-            updateBanner("", false);
-          }}
-        />
-      ) : null}
-      <TitleBar primaryAction={null} />
-      <Layout>
-        <Layout.Section>
-          <TagsProvider
-            value={{ tagsMap: tagsMap, productCount: productCount }}
-          >
-            {showProducts ? (
-              <div>
-                <ProductResourceList
-                  updateBanner={updateBanner}
-                ></ProductResourceList>
-                <br />
-                <Button onClick={handleShowSummary} primary>
-                  Back
-                </Button>
-              </div>
-            ) : (
-              <div>
-                <Summary showProductHandler={handleShowProducts}></Summary>
-              </div>
-            )}
-          </TagsProvider>
-        </Layout.Section>
-      </Layout>
-    </Page>
+    <div className={styles.Page}>
+      <Page>
+        {showBanner ? (
+          <Banner
+            title={bannerMessage}
+            status={bannerStatus}
+            onDismiss={() => {
+              updateBanner("", false);
+            }}
+          />
+        ) : null}
+        <TitleBar primaryAction={null} />
+        <Layout>
+          <Layout.Section>
+            <TagsProvider
+              value={{ tagsMap: tagsMap, productCount: productCount }}
+            >
+              {showProducts ? (
+                <div>
+                  <ProductResourceList
+                    updateBanner={updateBanner}
+                  ></ProductResourceList>
+                  <br />
+                  <Button onClick={handleShowSummary} primary>
+                    Back
+                  </Button>
+                </div>
+              ) : (
+                <div>{/* <Summary></Summary> */}</div>
+              )}
+              <Stack>
+                <Stack.Item fill>
+                  <ProductStats />
+                </Stack.Item>
+                <Stack.Item fill>
+                  <ViewAllProductsCard
+                    showProductHandler={handleShowProducts}
+                  />
+                </Stack.Item>
+                {/* <Card showProductHandler={handleShowProducts} /> */}
+                <Stack.Item>
+                  <Text variant="headingMd" as="h6">
+                    Online store dashboard
+                  </Text>
+                  <Stack wrap={false}>
+                    <SingleProductCard />
+                    <SingleProductCard />
+                    <SingleProductCard />
+                    {/* <SingleProductCard /> */}
+                  </Stack>
+                </Stack.Item>
+              </Stack>
+            </TagsProvider>
+          </Layout.Section>
+        </Layout>
+      </Page>
+    </div>
   );
 }
