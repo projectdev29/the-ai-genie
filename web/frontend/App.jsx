@@ -21,10 +21,10 @@ export default function App() {
             <NavigationMenu
               navigationLinks={
                 [
-                  // {
-                  //   label: "All Products",
-                  //   destination: "/allproducts",
-                  // },
+                  {
+                    label: "All Products",
+                    destination: "/allproducts",
+                  },
                 ]
               }
             />
