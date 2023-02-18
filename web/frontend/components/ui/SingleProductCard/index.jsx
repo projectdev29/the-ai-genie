@@ -11,7 +11,12 @@ import { CircleTickMajor } from "@shopify/polaris-icons";
 import React from "react";
 import styles from "./SingleProductCard.module.scss";
 
-export function SingleProductCard() {
+export function SingleProductCard({
+  imgSrc,
+  icon,
+  productName,
+  productDescription,
+}) {
   return (
     <div className={styles.Card}>
       <div style={{ padding: "1rem" }}>
@@ -24,13 +29,11 @@ export function SingleProductCard() {
               />
             </div>
           </Stack.Item>
-          <span>
-            <Icon source={AlertMinor} color="warning" />
-          </span>
           <Stack.Item fill>
             <p>Kids winter beanie hatsame</p>
             <TextStyle variation="subdued">some dummy description</TextStyle>
           </Stack.Item>
+          <Icon source={AlertMinor} color="warning" />
         </Stack>
       </div>
     </div>

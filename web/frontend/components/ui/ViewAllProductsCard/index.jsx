@@ -3,7 +3,6 @@ import { MediaCard } from "@shopify/polaris";
 import { CardSvgComponent } from "./CardSvgComponent";
 
 export function Card({ showProductHandler }) {
-
   return (
     <div className="" style={{ width: "260px", height: "280px" }}>
       <MediaCard
@@ -32,7 +31,5 @@ export function Card({ showProductHandler }) {
 }
 
 export function ViewAllProductsCard({ showProductHandler }) {
-  return (
-	<CardSvgComponent showProductHandler={showProductHandler}/>
-  );
+  return <CardSvgComponent showProductHandler={showProductHandler} />;
 }
