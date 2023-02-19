@@ -25,13 +25,40 @@ import { TagsProvider } from "../components/TagsContext";
 import { useParams } from "react-router-dom";
 
 import { SingleProductCard } from "../components/ui/SingleProductCard";
-import {
-  ViewAllProductsCard,
-  Card,
-} from "../components/ui/ViewAllProductsCard";
+import { ViewAllProductsCard } from "../components/ui/ViewAllProductsCard";
 // import { ProductCard } from '../components/ui/ProductCard'
 
 import styles from "./index.module.scss";
+const products = [
+  {
+    id: 1,
+    name: "Black choker necklace",
+    description: "Black choker necklace",
+    quantity: 1,
+    price: "$10.00",
+  },
+  {
+    id: 2,
+    name: "Black choker necklace",
+    description: "Black choker necklace",
+    quantity: 1,
+    price: "$10.00",
+  },
+  {
+    id: 3,
+    name: "Black choker necklace",
+    description: "Black choker necklace",
+    quantity: 1,
+    price: "$10.00",
+  },
+  {
+    id: 4,
+    name: "Black choker necklace",
+    description: "Black choker necklace",
+    quantity: 1,
+    price: "$10.00",
+  },
+];
 
 export default function HomePage() {
   const authFetch = useAuthenticatedFetch();
@@ -81,7 +108,8 @@ export default function HomePage() {
   }, []);
 
   const handleShowProducts = useCallback(() => {
-    setShowProducts(true);
+    // setShowProducts(true);
+    navigate("/allproducts");
   });
 
   const handleShowSummary = useCallback(() => {
@@ -94,6 +122,12 @@ export default function HomePage() {
   return (
     <div className={styles.Page}>
       <Page>
+        <div className={styles.Heading}>
+          <Text variant="headingMd" as="h6" fontWeight="regular">
+            Dashboard
+          </Text>
+        </div>
+
         {showBanner ? (
           <Banner
             title={bannerMessage}
@@ -133,14 +167,19 @@ export default function HomePage() {
                 </Stack.Item>
                 {/* <Card showProductHandler={handleShowProducts} /> */}
                 <Stack.Item>
-                  <Text variant="headingMd" as="h6">
-                    Online store dashboard
-                  </Text>
+                  <div className={styles.Subheading}>
+                    <Text variant="bodySm" as="h6" color="subdued">
+                      Recently Updated Products
+                    </Text>
+                  </div>
                   <Stack wrap={false}>
-                    <SingleProductCard />
-                    <SingleProductCard />
-                    <SingleProductCard />
-                    {/* <SingleProductCard /> */}
+                    {products?.map((product) => (
+                      <SingleProductCard
+                        key={product.id}
+                        productName={product.name}
+                        // productDescription={product.description}
+                      />
+                    ))}
                   </Stack>
                 </Stack.Item>
               </Stack>

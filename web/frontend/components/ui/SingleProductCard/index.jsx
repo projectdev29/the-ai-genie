@@ -16,10 +16,11 @@ export function SingleProductCard({
   icon,
   productName,
   productDescription,
+  onClickHandler,
 }) {
   return (
-    <div className={styles.Card}>
-      <div style={{ padding: "1rem" }}>
+    <div className={styles.Card} onClick={onClickHandler}>
+      <div>
         <Stack alignment="leading" spacing="extraTight">
           <Stack.Item>
             <div className={styles.Image}>
@@ -29,11 +30,13 @@ export function SingleProductCard({
               />
             </div>
           </Stack.Item>
-          <Stack.Item fill>
-            <p>Kids winter beanie hatsame</p>
-            <TextStyle variation="subdued">some dummy description</TextStyle>
-          </Stack.Item>
           <Icon source={AlertMinor} color="warning" />
+          <Stack.Item fill>
+            {productName ? <p>{productName}</p> : <div> </div>}
+            {productDescription ? (
+              <TextStyle variation="subdued">{productDescription}</TextStyle>
+            ) : null}
+          </Stack.Item>
         </Stack>
       </div>
     </div>

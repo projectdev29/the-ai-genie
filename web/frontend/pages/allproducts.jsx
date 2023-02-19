@@ -20,10 +20,10 @@ import {
   ExternalMinor,
   SaveMinor,
 } from "@shopify/polaris-icons";
-import { CirclePlusMinor } from "@shopify/polaris-icons";
 
 import styles from "./allProducts.module.scss";
-import { SelectedProductDetails } from "../components/ui/SelectedProductDetails";
+
+import { SelectedProductDetails } from "../components/ui/ProductDescriptionCarousel";
 
 // const SpacingBackground = ({ children, width = "100%" }) => {
 //   return (
@@ -67,24 +67,26 @@ import { SelectedProductDetails } from "../components/ui/SelectedProductDetails"
 // };
 
 export default function AllProducts(props) {
-  const [selected, setSelected] = React.useState(false);
+  const [showProduct, setShowProduct] = React.useState(false);
   function toggleSelected() {
     console.log("Clicked");
-    setSelected(!selected);
+    setShowProduct(!showProduct);
   }
 
   return (
     <div className={styles.Page}>
       <Page
         title="All Products"
-        titleMetadata={<Badge status="success">Online store</Badge>}
+        // titleMetadata={<Badge status="success">Online store</Badge>}
         breadcrumbs={[{ content: "Products", url: "#" }]}
         secondaryActions={
           <Stack>
-            <div className="">Filters:</div>
+            <Text variant="bodySm" as="span" color="subdued">
+              Filters:
+            </Text>
             <Tag url="#" onClick={() => toggleSelected()}>
               <Stack spacing="extraTight">
-                <Icon source={AlertMinor} />
+                <Icon source={AlertMinor} color="subdued" />
                 <span> Not Started Yet </span>
               </Stack>
             </Tag>
@@ -92,6 +94,7 @@ export default function AllProducts(props) {
               <Stack spacing="extraTight">
                 <Icon
                   source={CircleTickMinor}
+                  color="subdued"
                   onClick={() => console.log("Clicked")}
                 />
                 <span>Reviewed </span>
@@ -101,6 +104,7 @@ export default function AllProducts(props) {
               <Stack spacing="extraTight">
                 <Icon
                   source={SaveMinor}
+                  color="subdued"
                   onClick={() => console.log("Clicked")}
                 />
                 <span>Saved For Later </span>
@@ -110,6 +114,7 @@ export default function AllProducts(props) {
               <Stack spacing="extraTight">
                 <Icon
                   source={ExternalMinor}
+                  color="subdued"
                   onClick={() => console.log("Clicked")}
                 />
                 <span>Published </span>
@@ -131,9 +136,17 @@ export default function AllProducts(props) {
                 md: "1",
               }}
             >
-              <ProductSidebar />
+              <ProductSidebar
+                setShowProduct={setShowProduct}
+                showProduct={showProduct}
+                onClickHandler={toggleSelected}
+              />
               {/* <ProductResourceList /> */}
-              {selected ? <SelectedProductDetails /> : <SelectedProductEmpty />}
+              {showProduct ? (
+                <SelectedProductDetails />
+              ) : (
+                <SelectedProductEmpty />
+              )}
             </Columns>
             {/* </SpacingBackground> */}
           </Layout.Section>

@@ -9,7 +9,7 @@ export function SelectedProductEmpty() {
       <Card subdued={true}>
         <div className={styles.EmptyCardContent}>
           <EmptyState
-            heading="Select a product to get started"
+            // heading="Select a product to get started"
             // action={{ content: 'Upload files' }}
             image="/assets/emptyProductList.svg"
             fullWidth

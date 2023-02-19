@@ -10,7 +10,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import TagsContext from "./TagsContext";
-import { Card } from "@shopify/polaris";
+import { Card, Text, Stack } from "@shopify/polaris";
 
 ChartJS.register(
   CategoryScale,
@@ -24,30 +24,25 @@ ChartJS.register(
 export const options = {
   element: {
     bar: {
-      borderRadius: 10,
+      // borderRadius: 10,
       barWidth: 10,
     },
   },
 
   scales: {
-    barPercentage: 0.2,
-
-    xAxes: [
-      {
-        barThickness: 10,
-      },
-    ],
     x: {
-      ticks: {
-        color: "rgba(255, 255, 255, 0.5)",
-      },
-
       grid: {
         display: false,
       },
     },
+    y: {
+      ticks: {
+        callback: function (value, index, values) {
+          return value % 2 === 0 ? value : "";
+        },
+      },
+    },
   },
-
   maintainAspectRatio: false,
   responsive: true,
   plugins: {
@@ -55,7 +50,7 @@ export const options = {
       display: false,
     },
     title: {
-      display: true,
+      display: false,
       text: "Total 15 Products",
     },
   },
@@ -83,19 +78,29 @@ export default function ProductStats() {
     labels,
     datasets: [
       {
+        label: "Products",
         backgroundColor: ["#008080", "#008080", "#008080", "#008080"],
         hoverBackgroundColor: "#325AE7",
         barPercentage: 0.1,
         categorySpacing: 2,
-        data: [10, 30, 65, 60, 40],
+        data: [3, 4, 2, 6],
+        borderWidth: 2,
         borderRadius: 20,
+        borderSkipped: false,
       },
     ],
   };
 
   return (
-    <Card sectioned>
-      <Bar height={200} width={400} options={options} data={data} />
-    </Card>
+    <Stack>
+      <Card>
+        <Text variant="bodyMd" as="span" color="subdued" alignment="end">
+          Total 15 Products
+        </Text>
+        <div style={{ height: 280, minWidth: 520 }}>
+          <Bar height={280} width={520} options={options} data={data} />
+        </div>
+      </Card>
+    </Stack>
   );
 }

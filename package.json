@@ -13,8 +13,8 @@
     "deploy": "shopify app deploy"
   },
   "dependencies": {
-    "@shopify/app": "3.43.0",
-    "@shopify/cli": "3.43.0",
+    "@shopify/app": "^3.0.24",
+    "@shopify/cli": "^3.0.24",
     "@shopify/css-utilities": "^3.1.0",
     "chart.js": "^4.1.2",
     "react-chartjs-2": "^5.2.0"

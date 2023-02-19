@@ -6,4 +6,17 @@
   display: flex;
   justify-content: center;
   align-items: baseline;
+  margin: 1rem 0;
+}
+
+.Sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  // padding: 1rem;
+  background-color: var(--p-surface, white);
+  border-radius: var(--p-border-radius-4, 0.25rem);
+  box-shadow: var(--p-shadow-top-bar, shadow());
+  margin: 0 1rem;
 }
