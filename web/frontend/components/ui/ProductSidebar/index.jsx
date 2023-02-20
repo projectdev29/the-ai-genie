@@ -15,38 +15,9 @@ import { ArrowLeftMinor } from "@shopify/polaris-icons";
 import { Columns, Inline } from "@shopify/polaris";
 import { SingleProductCard } from "../SingleProductCard";
 
-import styles from "./ProductSidebar.module.scss";
+import { products } from "../../../pages/products";
 
-const products = [
-  {
-    id: 1,
-    name: "Black choker necklace",
-    description: "Black choker necklace",
-    quantity: 1,
-    price: "$10.00",
-  },
-  {
-    id: 2,
-    name: "Black choker necklace",
-    description: "Black choker necklace",
-    quantity: 1,
-    price: "$10.00",
-  },
-  {
-    id: 3,
-    name: "Black choker necklace",
-    description: "Black choker necklace",
-    quantity: 1,
-    price: "$10.00",
-  },
-  {
-    id: 4,
-    name: "Black choker necklace",
-    description: "Black choker necklace",
-    quantity: 1,
-    price: "$10.00",
-  },
-];
+import styles from "./ProductSidebar.module.scss";
 
 export function ProductSidebar({ onClickHandler }) {
   return (
@@ -56,7 +27,7 @@ export function ProductSidebar({ onClickHandler }) {
           resourceName={{ singular: "customer", plural: "customers" }}
           items={products}
           renderItem={(item) => {
-            const { id, url, name, description } = item;
+            const { id, image, tag, name, description } = item;
             // const media = <Avatar customer size="medium" name={name} />;
             return (
               <ResourceItem
@@ -70,8 +41,10 @@ export function ProductSidebar({ onClickHandler }) {
                     console.log(id);
                     onClickHandler(id);
                   }}
-                  productDescription={description}
-                  productName={name}
+                  image={image}
+                  tag={tag}
+                  name={name}
+                  description={description}
                 />
                 {/* <Text variant="bodyMd" fontWeight="bold" as="h3">
 												{name}

@@ -1,44 +1,49 @@
-import {
-  Stack,
-  Badge,
-  Thumbnail,
-  Card,
-  TextStyle,
-  Icon,
-} from "@shopify/polaris";
-import { AlertMinor } from "@shopify/polaris-icons";
-import { CircleTickMajor } from "@shopify/polaris-icons";
 import React from "react";
+import { Stack, Icon, Image, Text } from "@shopify/polaris";
+import {
+  AlertMinor,
+  CircleTickMinor,
+  SaveMinor,
+  FinancesMinor,
+} from "@shopify/polaris-icons";
+
 import styles from "./SingleProductCard.module.scss";
 
 export function SingleProductCard({
-  imgSrc,
-  icon,
-  productName,
-  productDescription,
+  image,
+  tag,
+  name,
+  description,
+  shortName,
   onClickHandler,
 }) {
+  const icons = {
+    "Not Started Yet": { source: AlertMinor, color: "warning" },
+    Reviewed: { source: CircleTickMinor, color: "interactive" },
+    "Saved For Later": { source: SaveMinor, color: "subdued" },
+    Published: { source: FinancesMinor, color: "success" },
+  };
+
   return (
-    <div className={styles.Card} onClick={onClickHandler}>
-      <div>
-        <Stack alignment="leading" spacing="extraTight">
-          <Stack.Item>
-            <div className={styles.Image}>
-              <Thumbnail
-                source="/assets/shopping.webp"
-                alt="Black choker necklace"
-              />
-            </div>
-          </Stack.Item>
-          <Icon source={AlertMinor} color="warning" />
-          <Stack.Item fill>
-            {productName ? <p>{productName}</p> : <div> </div>}
-            {productDescription ? (
-              <TextStyle variation="subdued">{productDescription}</TextStyle>
-            ) : null}
-          </Stack.Item>
-        </Stack>
-      </div>
+    <div className={styles.Card}>
+      <Stack spacing="extraTight">
+        <Stack.Item>
+          <div className={styles.Image}>
+            <Image src={`/assets/${image}`}></Image>
+          </div>
+        </Stack.Item>
+        <Stack.Item>
+          <Stack spacing="extraTight">
+            <Icon source={icons[tag].source} color={icons[tag].color} />
+            <p style={shortName ? { width: "100px" } : {}}>{name}</p>
+          </Stack>
+          {description && (
+            <Text variation="bodySm" color="subdued">
+              {description}
+            </Text>
+          )}
+        </Stack.Item>
+      </Stack>
     </div>
   );
 }

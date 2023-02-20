@@ -21,7 +21,7 @@ export default function App() {
             <NavigationMenu
               navigationLinks={[
                 {
-                  label: "All Products",
+                  label: "all products",
                   destination: "/allproducts",
                 },
               ]}

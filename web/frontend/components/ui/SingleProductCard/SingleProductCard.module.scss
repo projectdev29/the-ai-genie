@@ -1,19 +1,16 @@
 .Card {
-  // max-width: 200px;
-  border-radius: var(--p-border-radius-4, 0.25rem);
   padding: 1rem 0;
 }
+
 .Image {
-  border-radius: var(--p-border-radius-4, 0.25rem);
-  box-shadow: var(--p-shadow-top-bar, shadow());
-
   width: 60px;
   height: 60px;
-}
-.Polaris-Thumbnail {
-  box-shadow: var(--p-shadow-top-bar, shadow());
+  border-radius: var(--p-border-radius-large);
+  box-shadow: 0px 0px 8px 8px rgba(0, 0, 0, 0.1);
 
-  border-radius: 20% !important;
-  width: 60px;
-  height: 60px;
+  img {
+    border-radius: var(--p-border-radius-large);
+    width: 100%;
+    height: 100%;
+  }
 }

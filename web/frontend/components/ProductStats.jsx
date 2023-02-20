@@ -24,11 +24,9 @@ ChartJS.register(
 export const options = {
   element: {
     bar: {
-      // borderRadius: 10,
-      barWidth: 10,
+      barWidth: 9,
     },
   },
-
   scales: {
     x: {
       grid: {
@@ -43,15 +41,10 @@ export const options = {
       },
     },
   },
-  maintainAspectRatio: false,
   responsive: true,
   plugins: {
     legend: {
       display: false,
-    },
-    title: {
-      display: false,
-      text: "Total 15 Products",
     },
   },
 };
@@ -84,7 +77,7 @@ export default function ProductStats() {
         barPercentage: 0.1,
         categorySpacing: 2,
         data: [3, 4, 2, 6],
-        borderWidth: 2,
+        borderWidth: 0,
         borderRadius: 20,
         borderSkipped: false,
       },
@@ -93,12 +86,12 @@ export default function ProductStats() {
 
   return (
     <Stack>
-      <Card>
+      <Card sectioned>
         <Text variant="bodyMd" as="span" color="subdued" alignment="end">
           Total 15 Products
         </Text>
-        <div style={{ height: 280, minWidth: 520 }}>
-          <Bar height={280} width={520} options={options} data={data} />
+        <div style={{ minHeight: 218, minWidth: 540 }}>
+          <Bar height={218} width={540} options={options} data={data} />
         </div>
       </Card>
     </Stack>
