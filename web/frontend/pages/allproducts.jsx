@@ -25,47 +25,6 @@ import styles from "./allProducts.module.scss";
 
 import { SelectedProductDetails } from "../components/ui/ProductDescriptionCarousel";
 
-// const SpacingBackground = ({ children, width = "100%" }) => {
-//   return (
-//     <div
-//       style={{
-//         background:
-//           "repeating-linear-gradient(-45deg, #7B47F1, #7B47F1 1px, #E8D1FA 1px, #E8D1FA 7px)",
-//         width: width ?? undefined,
-//         height: "auto",
-//       }}
-//     >
-//       {children}
-//     </div>
-//   );
-// };
-
-// const Placeholder = ({ label = "", height = "auto", width = "auto" }) => {
-//   return (
-//     <div
-//       style={{
-//         display: "inherit",
-//         background: "#7B47F1",
-//         height: height ?? undefined,
-//         width: width ?? undefined,
-//       }}
-//     >
-//       <Inline align="center" blockAlign="center">
-//         <div
-//           style={{
-//             color: "#FFFFFF",
-//             width: width ?? undefined,
-//           }}
-//         >
-//           <Text as="h2" variant="bodyMd" fontWeight="medium" alignment="center">
-//             {label}
-//           </Text>
-//         </div>
-//       </Inline>
-//     </div>
-//   );
-// };
-
 export default function AllProducts(props) {
   const [showProduct, setShowProduct] = React.useState(false);
   function toggleSelected() {

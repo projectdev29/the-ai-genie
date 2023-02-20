@@ -1,20 +1,7 @@
 import React from "react";
+import { Card, ResourceList, ResourceItem, Pagination } from "@shopify/polaris";
 
-import {
-  Card,
-  ResourceList,
-  Avatar,
-  ResourceItem,
-  Text,
-  Stack,
-  Page,
-} from "@shopify/polaris";
-import { Pagination } from "@shopify/polaris";
-
-import { ArrowLeftMinor } from "@shopify/polaris-icons";
-import { Columns, Inline } from "@shopify/polaris";
 import { SingleProductCard } from "../SingleProductCard";
-
 import { products } from "../../../pages/products";
 
 import styles from "./ProductSidebar.module.scss";
@@ -28,11 +15,11 @@ export function ProductSidebar({ onClickHandler }) {
           items={products}
           renderItem={(item) => {
             const { id, image, tag, name, description } = item;
-            // const media = <Avatar customer size="medium" name={name} />;
+
             return (
               <ResourceItem
                 id={id}
-                url={url}
+                // url={url}
                 // media={media}
                 accessibilityLabel={`View details for ${name}`}
               >
@@ -46,10 +33,6 @@ export function ProductSidebar({ onClickHandler }) {
                   name={name}
                   description={description}
                 />
-                {/* <Text variant="bodyMd" fontWeight="bold" as="h3">
-												{name}
-											</Text>
-											<div>{location}</div> */}
               </ResourceItem>
             );
           }}
