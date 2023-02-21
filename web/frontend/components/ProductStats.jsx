@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { Card, Text, Stack } from "@shopify/polaris";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -21,13 +22,28 @@ ChartJS.register(
 );
 
 export const options = {
-  maintainAspectRatio: false,
+  element: {
+    bar: {
+      barWidth: 9,
+    },
+  },
+  scales: {
+    x: {
+      grid: {
+        display: false,
+      },
+    },
+    y: {
+      ticks: {
+        callback: function (value, index, values) {
+          return value % 2 === 0 ? value : "";
+        },
+      },
+    },
+  },
   responsive: true,
   plugins: {
     legend: {
-      position: "top",
-    },
-    title: {
       display: false,
     },
   },
@@ -56,11 +72,28 @@ export default function ProductStats() {
     datasets: [
       {
         label: "Products",
-        data: mapData,
-        backgroundColor: "rgba(93, 174, 199, 1)",
+        backgroundColor: ["#008080", "#008080", "#008080", "#008080"],
+        hoverBackgroundColor: "#325AE7",
+        barPercentage: 0.1,
+        categorySpacing: 2,
+        data: [3, 4, 2, 6],
+        borderWidth: 0,
+        borderRadius: 20,
+        borderSkipped: false,
       },
     ],
   };
 
-  return <Bar height={200} width={400} options={options} data={data} />;
+  return (
+    <Stack>
+      <Card sectioned>
+        <Text variant="bodyMd" as="span" color="subdued" alignment="end">
+          Total 15 Products
+        </Text>
+        <div style={{ minHeight: 218, minWidth: 540 }}>
+          <Bar height={218} width={540} options={options} data={data} />
+        </div>
+      </Card>
+    </Stack>
+  );
 }

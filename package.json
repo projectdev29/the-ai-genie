@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "web/index.js",
   "license": "UNLICENSED",
+  "author": "babar",
   "scripts": {
     "shopify": "shopify",
     "build": "shopify app build",
@@ -12,10 +13,15 @@
     "deploy": "shopify app deploy"
   },
   "dependencies": {
-    "@shopify/app": "3.30.1",
-    "@shopify/cli": "3.30.1",
+    "@shopify/app": "^3.0.24",
+    "@shopify/cli": "^3.0.24",
+    "@shopify/css-utilities": "^3.1.0",
     "chart.js": "^4.1.2",
     "react-chartjs-2": "^5.2.0"
   },
-  "author": "babar"
+  "devDependencies": {
+    "@shopify/stylelint-polaris": "^6.0.1",
+    "sass": "^1.58.2",
+    "stylelint": "^14.15.0"
+  }
 }

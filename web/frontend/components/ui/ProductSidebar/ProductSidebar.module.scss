@@ -1,0 +1,45 @@
+.Polaris-ButtonGroup {
+  justify-content: center;
+}
+
+.Sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  background-color: var(--p-surface, white);
+  border-radius: var(--p-border-radius-4, 0.25rem);
+  box-shadow: var(--p-shadow-top-bar, shadow());
+  padding: 0 1rem;
+}
+
+.Pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.Right {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 14px;
+  min-width: 14px;
+  color: #2789e5;
+  cursor: pointer;
+}
+
+.Left {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 14px;
+  min-width: 14px;
+  color: #999999;
+  cursor: pointer;
+}
+
+.PaginationText {
+  color: #999999;
+}

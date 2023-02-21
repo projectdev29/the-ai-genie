@@ -1,0 +1,16 @@
+.Page {
+  margin-top: none;
+  background-color: #fff;
+  padding-bottom: 2rem;
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+}
+
+.Tag {
+  display: flex;
+  cursor: pointer;
+
+  span {
+    margin-left: var(--p-space-1);
+  }
+}
