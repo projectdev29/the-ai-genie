@@ -1,65 +1,69 @@
 import React from "react";
-import { Card, ResourceList, ResourceItem, Pagination } from "@shopify/polaris";
+import { ResourceList, ResourceItem } from "@shopify/polaris";
 
 import { SingleProductCard } from "../SingleProductCard";
 import { products } from "../../../pages/products";
 
-import styles from "./ProductSidebar.module.scss";
-import ChevronLeft from "../../../assets/Icons/ChevronLeft";
-import ChevronRight from "../../../assets/Icons/ChevronRight";
+import ChevronLeft from "../../../assets/icons/ChevronLeft";
+import ChevronRight from "../../../assets/icons/ChevronRight";
 
-export function ProductSidebar({ onClickHandler }) {
+import styles from "./ProductSidebar.module.scss";
+
+export function ProductSidebar({ tag, onClickProduct }) {
+  const filteredProducts = React.useMemo(() => {
+    return products.filter(
+      (product) => tag === undefined || product.tag === tag
+    );
+  }, [products, tag]);
+
   return (
-    <>
-      <div className={styles.Sidebar}>
-        <ResourceList
-          resourceName={{ singular: "customer", plural: "customers" }}
-          items={products}
-          renderItem={(item) => {
-            const { id, image, tag, name, description } = item;
-            return (
-              <ResourceItem
-                id={id}
-                // url={url}
-                // media={media}
-                accessibilityLabel={`View details for ${name}`}
-              >
-                <SingleProductCard
-                  onClickHandler={() => {
-                    console.log(id);
-                    onClickHandler(id);
-                  }}
-                  image={image}
-                  tag={tag}
-                  name={name}
-                  description={description}
-                />
-              </ResourceItem>
-            );
+    <div className={styles.Sidebar}>
+      <ResourceList
+        resourceName={{ singular: "customer", plural: "customers" }}
+        items={filteredProducts}
+        renderItem={(item) => {
+          const { id, image, tag, name, description } = item;
+          return (
+            <ResourceItem
+              id={id}
+              // url={url}
+              // media={media}
+              accessibilityLabel={`View details for ${name}`}
+            >
+              <SingleProductCard
+                onClick={() => {
+                  onClickProduct(item);
+                }}
+                image={image}
+                tag={tag}
+                name={name}
+                description={description}
+              />
+            </ResourceItem>
+          );
+        }}
+      />
+      <div className={styles.Pagination}>
+        <div
+          className={styles.Left}
+          onClick={() => {
+            console.log("Previous");
           }}
-        />
-        <div className={styles.Pagination}>
-          <div
-            className={styles.Left}
-            onClick={() => {
-              console.log("Previous");
-            }}
-          >
-            <ChevronLeft />
-            Prev
-          </div>
-          <div className={styles.PaginationText}>Showing 5 of 16</div>
-          <div
-            className={styles.Right}
-            onClick={() => {
-              console.log("Next");
-            }}
-          >
-            Next
-            <ChevronRight />
-          </div>
+        >
+          <ChevronLeft />
+          Prev
+        </div>
+        <div className={styles.PaginationText}>Showing 5 of 16</div>
+        <div
+          className={styles.Right}
+          onClick={() => {
+            console.log("Next");
+          }}
+        >
+          Next
+          <ChevronRight />
         </div>
       </div>
-    </>
+    </div>
   );
 }

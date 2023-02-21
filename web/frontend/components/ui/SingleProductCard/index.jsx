@@ -10,11 +10,18 @@ import PaperPlane from "../../../assets/Icons/PaperPlane";
 
 function Icon({ Src, color }) {
   return (
-    <div className={styles.Icon} style={{ color: color }}>
+    <div style={{ color: color }}>
       <Src />
     </div>
   );
 }
+
+const icons = {
+  "Not Started Yet": { source: AlertCircle, color: "#EBB21E" },
+  Reviewed: { source: CheckmarkCircle, color: "#2789E5" },
+  "Saved For Later": { source: FloppyDisk, color: "#999999" },
+  Published: { source: PaperPlane, color: "#008080" },
+};
 
 export function SingleProductCard({
   image,
@@ -22,17 +29,10 @@ export function SingleProductCard({
   name,
   description,
   shortName,
-  onClickHandler,
+  onClick,
 }) {
-  const icons = {
-    "Not Started Yet": { source: AlertCircle, color: "#EBB21E" },
-    Reviewed: { source: CheckmarkCircle, color: "#2789E5" },
-    "Saved For Later": { source: FloppyDisk, color: "#999999" },
-    Published: { source: PaperPlane, color: "#008080" },
-  };
-
   return (
-    <div className={styles.Card} onClick={onClickHandler}>
+    <div className={styles.Card} onClick={onClick}>
       <Stack spacing="extraTight" wrap={false}>
         <Stack.Item>
           <div className={styles.Image}>
@@ -46,7 +46,7 @@ export function SingleProductCard({
               <p style={shortName ? { width: "100px" } : {}}>{name}</p>
             </Stack>
             {description && (
-              <Text variation="span" color="subdued">
+              <Text variation="span" color="subdued" breakWord>
                 {description}
               </Text>
             )}

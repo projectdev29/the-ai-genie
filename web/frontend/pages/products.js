@@ -5,6 +5,11 @@ export const products = [
     tag: "Not Started Yet",
     name: "Kids Winter Beanie Hat",
     description: "Some dummy description about the product can be viewed here.",
+    reviews: [
+      "Detachable raccoon fur pom pom light weight and comfortable kids winter beanie hat.",
+      "Detachable raccoon fur pom pom light weight and comfortable kids winter beanie hat.",
+      "Detachable raccoon fur pom pom light weight and comfortable kids winter beanie hat.",
+    ],
   },
   {
     id: 2,
@@ -13,6 +18,11 @@ export const products = [
     name: "Sliver chic gown for parties",
     description:
       "Stunning sliver chic gown for girl. A nice wearable for parties.",
+    reviews: [
+      "Detachable raccoon fur pom pom light weight and comfortable sliver chic gown.",
+      "Detachable raccoon fur pom pom light weight and comfortable sliver chic gown.",
+      "Detachable raccoon fur pom pom light weight and comfortable sliver chic gown.",
+    ],
   },
   {
     id: 3,
@@ -27,6 +37,11 @@ export const products = [
     tag: "Reviewed",
     name: "Kids Winter Soft Jacket",
     description: "Sweet warm thicken winter autumn cotton cardigan.",
+    reviews: [
+      "Detachable raccoon fur pom pom light weight and comfortable Kids Winter Soft Jacket.",
+      "Detachable raccoon fur pom pom light weight and comfortable Kids Winter Soft Jacket.",
+      "Detachable raccoon fur pom pom light weight and comfortable Kids Winter Soft Jacket.",
+    ],
   },
   {
     id: 5,

@@ -1,18 +1,13 @@
-import { Card, EmptyState, Icon } from "@shopify/polaris";
 import React from "react";
+import { EmptyState } from "@shopify/polaris";
 
-import styles from "./SelectedProductEmpty.module.scss";
+import styles from "./SelectProductAlert.module.scss";
 
-export function SelectedProductEmpty() {
+export function SelectProductAlert() {
   return (
     <div className={styles.EmptyCard}>
       <div className={styles.EmptyCardContent}>
-        <EmptyState
-          // heading="Select a product to get started"
-          // action={{ content: 'Upload files' }}
-          image="/assets/emptyProductList.svg"
-          fullWidth
-        >
+        <EmptyState image="/assets/emptyProductList.svg" fullWidth>
           <p className={styles.EmptyCardContentText}>
             Select a product from the list on the left to edit or generate new
             product description.

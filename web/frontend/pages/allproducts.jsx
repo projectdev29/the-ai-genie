@@ -1,48 +1,27 @@
-// import { ProductResourceList } from "../components/ProductResourceList";
-import {
-  Badge,
-  Columns,
-  Inline,
-  Layout,
-  Page,
-  Stack,
-  Tag,
-  Text,
-} from "@shopify/polaris";
+import { Columns, Page, Stack, Text } from "@shopify/polaris";
 import React from "react";
 import { ProductSidebar } from "../components/ui/ProductSidebar";
-import { SelectedProductEmpty } from "../components/ui/SelectedProductEmpty";
+import { SelectProductAlert } from "../components/ui/SelectProductAlert";
+import { SelectedProductDetails } from "../components/ui/ProductDescriptionCarousel";
 
-// import {
-//   AlertMinor,
-//   CircleTickMinor,
-//   ExternalMinor,
-//   SaveMinor,
-// } from "@shopify/polaris-icons";
-
-import AlertCircle from "../assets/Icons/AlertCircle";
-import CheckmarkCircle from "../assets/Icons/CheckmarkCircle";
-import FloppyDisk from "../assets/Icons/FloppyDisk";
-import PaperPlane from "../assets/Icons/PaperPlane";
+import AlertCircle from "../assets/icons/AlertCircle";
+import CheckmarkCircle from "../assets/icons/CheckmarkCircle";
+import FloppyDisk from "../assets/icons/FloppyDisk";
+import PaperPlane from "../assets/icons/PaperPlane";
 
 import styles from "./allProducts.module.scss";
 
-import { SelectedProductDetails } from "../components/ui/ProductDescriptionCarousel";
-
 function Icon({ Src, color }) {
   return (
-    <div className={styles.Icon} style={{ color: color }}>
+    <div style={{ color: color }}>
       <Src />
     </div>
   );
 }
 
 export default function AllProducts(props) {
-  const [showProduct, setShowProduct] = React.useState(false);
-  function toggleSelected() {
-    console.log("Clicked");
-    setShowProduct(!showProduct);
-  }
+  const [selectedTag, setSelectedTag] = React.useState();
+  const [selectedProduct, setSelectedProduct] = React.useState();
 
   const data = [
     {
@@ -70,37 +49,43 @@ export default function AllProducts(props) {
       tagSource: PaperPlane,
     },
   ];
+
   return (
     <div className={styles.Page}>
       <Page
         title="All Products"
-        // titleMetadata={<Badge status="success">Online store</Badge>}
-        breadcrumbs={[{ content: "Products", url: "#" }]}
+        breadcrumbs={[{ content: "Dashboard", url: "/" }]}
         secondaryActions={
           <Stack>
             <Text variant="bodySm" as="span" color="subdued">
               Filter By :
             </Text>
             {data.map((item) => (
-              // <Tag url="#" onClick={() => toggleSelected()}>
-              <Stack spacing="extraTight" alignment="center">
-                <Icon
-                  Src={item.tagSource}
-                  color="#666666"
-                  onClick={() => console.log(item.tagName + " clicked")}
-                />
-                <Text variant="bodySm" as="span" color="subdued">
-                  {item.tagName}
-                </Text>
+              <Stack spacing="extraTight" alignment="center" key={item.id}>
+                <div
+                  className={styles.Tag}
+                  onClick={() => {
+                    setSelectedTag(item.tagName);
+                    setSelectedProduct(undefined);
+                  }}
+                >
+                  <Icon
+                    Src={item.tagSource}
+                    color={item.tagName === selectedTag ? "#916A00" : "#666666"}
+                  />
+                  <Text
+                    variant="bodySm"
+                    as="span"
+                    color={item.tagName === selectedTag ? "warning" : "subdued"}
+                  >
+                    {item.tagName}
+                  </Text>
+                </div>
               </Stack>
-              // </Tag>
             ))}
           </Stack>
         }
       >
-        {/* <Layout> */}
-        {/* <Layout.Section> */}
-        {/* <SpacingBackground> */}
         <Columns
           columns={{
             xs: "3fr 3fr",
@@ -112,16 +97,15 @@ export default function AllProducts(props) {
           }}
         >
           <ProductSidebar
-            setShowProduct={setShowProduct}
-            showProduct={showProduct}
-            onClickHandler={toggleSelected}
+            tag={selectedTag}
+            onClickProduct={setSelectedProduct}
           />
-          {/* <ProductResourceList /> */}
-          {showProduct ? <SelectedProductDetails /> : <SelectedProductEmpty />}
+          {selectedProduct ? (
+            <SelectedProductDetails product={selectedProduct} />
+          ) : (
+            <SelectProductAlert />
+          )}
         </Columns>
-        {/* </SpacingBackground> */}
-        {/* </Layout.Section> */}
-        {/* </Layout> */}
       </Page>
     </div>
   );
