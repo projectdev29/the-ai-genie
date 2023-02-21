@@ -11,8 +11,7 @@ import {
 } from "@shopify/polaris";
 import { useCallback, useEffect, useState } from "react";
 import { BackendApiHelper } from "../../middleware/backendapihelper";
-import { useAppQuery, useAuthenticatedFetch } from "../hooks";
-import { ProductSidebar } from "./ui/ProductSidebar";
+import { useAuthenticatedFetch } from "../hooks";
 
 export function ProductResourceList(props) {
   const [selectedItems, setSelectedItems] = useState([]);
@@ -240,7 +239,6 @@ export function ProductResourceList(props) {
           />
         }
       />
-      <ProductSidebar />
     </Card>
   );
 

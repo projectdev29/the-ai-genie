@@ -1,5 +1,5 @@
-import { Columns, Page, Stack, Text } from "@shopify/polaris";
 import React from "react";
+import { Columns, Page, Stack, Text } from "@shopify/polaris";
 import { ProductSidebar } from "../components/ui/ProductSidebar";
 import { SelectProductAlert } from "../components/ui/SelectProductAlert";
 import { SelectedProductDetails } from "../components/ui/ProductDescriptionCarousel";

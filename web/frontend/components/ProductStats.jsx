@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { Card, Text, Stack } from "@shopify/polaris";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,7 +11,6 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import TagsContext from "./TagsContext";
-import { Card, Text, Stack } from "@shopify/polaris";
 
 ChartJS.register(
   CategoryScale,
