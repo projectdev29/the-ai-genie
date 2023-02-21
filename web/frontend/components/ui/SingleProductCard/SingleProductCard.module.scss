@@ -1,5 +1,6 @@
 .Card {
   padding: 1rem 0;
+  max-width: 320px;
 }
 
 .Image {
@@ -13,4 +14,8 @@
     width: 100%;
     height: 100%;
   }
+}
+
+.TextContent {
+  margin-left: 0.5rem;
 }

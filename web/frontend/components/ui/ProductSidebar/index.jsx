@@ -5,17 +5,18 @@ import { SingleProductCard } from "../SingleProductCard";
 import { products } from "../../../pages/products";
 
 import styles from "./ProductSidebar.module.scss";
+import ChevronLeft from "../../../assets/Icons/ChevronLeft";
+import ChevronRight from "../../../assets/Icons/ChevronRight";
 
 export function ProductSidebar({ onClickHandler }) {
   return (
-    <Card>
+    <>
       <div className={styles.Sidebar}>
         <ResourceList
           resourceName={{ singular: "customer", plural: "customers" }}
           items={products}
           renderItem={(item) => {
             const { id, image, tag, name, description } = item;
-
             return (
               <ResourceItem
                 id={id}
@@ -38,19 +39,27 @@ export function ProductSidebar({ onClickHandler }) {
           }}
         />
         <div className={styles.Pagination}>
-          <Pagination
-            label="Showing 5 of 16"
-            hasPrevious
-            onPrevious={() => {
+          <div
+            className={styles.Left}
+            onClick={() => {
               console.log("Previous");
             }}
-            hasNext
-            onNext={() => {
+          >
+            <ChevronLeft />
+            Prev
+          </div>
+          <div className={styles.PaginationText}>Showing 5 of 16</div>
+          <div
+            className={styles.Right}
+            onClick={() => {
               console.log("Next");
             }}
-          />
+          >
+            Next
+            <ChevronRight />
+          </div>
         </div>
       </div>
-    </Card>
+    </>
   );
 }

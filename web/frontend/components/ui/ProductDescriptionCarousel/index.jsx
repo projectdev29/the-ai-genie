@@ -10,6 +10,11 @@ import { CirclePlusMinor } from "@shopify/polaris-icons";
 import styles from "./ProductDescriptionCarousel.module.scss";
 
 const useStyles = createStyles((theme) => ({
+  GenerateCard: {
+    backgroundColor: "#f2fbfb",
+    border: "1px solid #EAEAEA",
+    borderRadius: "12px 12px 0 0",
+  },
   text: {
     textAlign: "center",
     padding: "4rem 1rem",
@@ -21,9 +26,6 @@ const useStyles = createStyles((theme) => ({
   },
   SubHeading: {
     fontSize: "12px",
-  },
-  GenerateCard: {
-    backgroundColor: "#f2fbfb",
   },
   ButtonGroup: {
     padding: "1rem",
@@ -45,7 +47,7 @@ export function SelectedProductDetails() {
   };
 
   return (
-    <Card>
+    <div>
       <div className={classes.GenerateCard}>
         <Card.Section>
           <Stack distribution="equalSpacing">
@@ -71,7 +73,14 @@ export function SelectedProductDetails() {
       </div>
       {generate ? (
         <Card.Section>
-          <Text fz="lg">Generated Results</Text>
+          <Stack alignment="center" distribution="fillEvenly">
+            <Text my="lg" fz="lg">
+              Generated Results
+            </Text>
+            <Text my="lg" fz="xs" c="dimmed" ta="right">
+              Showing 1 of 5 Suggestions
+            </Text>
+          </Stack>
           <ProductDescriptionCarousel />
           <div className={classes.ButtonGroup}>
             <Button
@@ -84,7 +93,7 @@ export function SelectedProductDetails() {
           </div>
         </Card.Section>
       ) : null}
-    </Card>
+    </div>
   );
 }
 
