@@ -1,3 +1,6 @@
+import React from "react";
+import styles from "./ViewAllProductsCard.module.scss";
+
 export function CardSvgComponent({ showProductHandler }) {
   return (
     <svg
@@ -89,11 +92,11 @@ export function CardSvgComponent({ showProductHandler }) {
           d="M164 79.938c3.833-1.164 6.833-4.136 8.002-7.938 1.169 3.802 4.169 6.774 7.998 7.938-3.829 1.16-6.829 4.26-7.998 8.062-1.169-3.798-4.169-6.903-8.002-8.062zM87 26a9.034 9.034 0 006.004-6A9.039 9.039 0 0099 26a9.03 9.03 0 00-5.996 6A9.051 9.051 0 0087 26z"
         ></path>
         <rect
+          className={styles.ViewAllProductsButton}
           width="180"
           height="40"
           x="40"
           y="220"
-          fill="#2789E5"
           rx="6"
           onClick={showProductHandler}
         ></rect>

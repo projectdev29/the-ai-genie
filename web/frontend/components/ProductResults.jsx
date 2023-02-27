@@ -1,7 +1,7 @@
 import { Card, Heading, Stack, TextField } from "@shopify/polaris";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useAuthenticatedFetch } from "../hooks";
-import ProductContext from "../pages/productdetails/ProductContext";
+import ProductContext from "../pages/ProductContext";
 export function ProductResults() {
   const productContext = useContext(ProductContext);
   const [alternateDesc, setAlternateDesc] = useState();
@@ -67,7 +67,7 @@ export function ProductResults() {
             onChange={handleCopyChange}
             multiline={4}
             autoComplete="off"
-            helpText="You can edit our suggestion in this text area. Just click 'Update Product' when you have finalized the description and are ready to save."
+            helpText="You can edit our suggestion in this text area. Just click 'Use This Description' when you have finalized the description and are ready to save."
           />
           <br></br>
         </Card>

@@ -24,3 +24,11 @@
   flex-wrap: false;
   justify-content: space-between;
 }
+
+.ViewAllProductsButton {
+  fill: #2789e5;
+}
+
+.ViewAllProductsButton:hover {
+  fill: rgb(11, 47, 228);
+}

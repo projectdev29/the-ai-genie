@@ -36,7 +36,7 @@ export function SingleProductCard({
       <Stack spacing="extraTight" wrap={false}>
         <Stack.Item>
           <div className={styles.Image}>
-            <Image src={`/assets/${image}`}></Image>
+            <Image src={`${image}`}></Image>
           </div>
         </Stack.Item>
         <Stack.Item>

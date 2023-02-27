@@ -16,7 +16,7 @@ import { useParams } from "react-router-dom";
 import { BackendApiHelper } from "../../../middleware/backendapihelper";
 import { ProductResults } from "../../components/ProductResults";
 import { useAuthenticatedFetch } from "../../hooks";
-import { ProductProvider } from "./ProductContext";
+import { ProductProvider } from "../ProductContext";
 import { Image } from "@shopify/polaris";
 import { useNavigate } from "@shopify/app-bridge-react";
 

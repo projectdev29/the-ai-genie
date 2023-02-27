@@ -10,42 +10,48 @@ import { TagsProvider } from "../components/TagsContext";
 import { SingleProductCard } from "../components/ui/SingleProductCard";
 import { ViewAllProductsCard } from "../components/ui/ViewAllProductsCard";
 
-import { products } from "./products";
+import { dummyProducts } from "./products";
 
 import styles from "./index.module.scss";
+import { ShopifyApiHelper } from "../../middleware/shopifyapihelper";
 
 export default function HomePage() {
   const authFetch = useAuthenticatedFetch();
   const navigate = useNavigate();
-  const [store, setStore] = useState({});
+  const [storeId, setStoreId] = useState(0);
   const [tagsMap, setTagsMap] = useState([]);
   const [productCount, setProductCount] = useState(null);
+  const [productsFromDb, setProductsFromDb] = useState(null);
   const [showBanner, setShowBanner] = useState(false);
   const [bannerMessage, setBannerMessage] = useState(null);
   const [bannerStatus, setBannerStatus] = useState("success");
-  const { dontShowMainScreen } = useParams();
 
   useEffect(async () => {
-    console.log("dont show main screen: " + dontShowMainScreen);
-    if (dontShowMainScreen) {
-      setShowProducts(true);
+    if (!window.sessionStorage["store_id"]) {
+      const shopifyStore = await ShopifyApiHelper.getStore(authFetch);
+      window.sessionStorage["store_id"] = shopifyStore.id;
+      setStoreId(shopifyStore.id);
+
+      const productCount = await ShopifyApiHelper.getProductsCount(authFetch);
+      setProductCount(productCount);
+      window.sessionStorage["product_count"] = productCount;
+
+      const productsFromDbResults = await BackendApiHelper.doGet(
+        "/api/products/" + shopifyStore.id
+      );
+      setProductsFromDb(productsFromDbResults.result);
+      window.sessionStorage["products_from_db"] = productsFromDbResults.result;
+    } else {
+      setStoreId(window.sessionStorage["store_id"]);
+      setProductCount(window.sessionStorage["product_count"]);
+      setProductsFromDb(window.sessionStorage["products_from_db"]);
     }
-    const shopResponse = await authFetch("/api/shop");
-    const stores = await shopResponse.json();
-    setStore(stores[0]);
 
-    const countResponse = await authFetch("/api/products/count");
-    const countResponseJson = await countResponse.json();
-    setProductCount(countResponseJson.count);
-
-    const productsFromDb = await BackendApiHelper.doGet(
-      "/api/products/" + stores[0].id
-    );
-
-    if (productsFromDb.result) {
+    if (productsFromDb) {
       let initialTagsMap = [];
       await Promise.all(
         productsFromDb.result.map((productFromDb) => {
+          // there will be only 1 tag per product
           let tag = productFromDb.tags;
           if (initialTagsMap[tag]) {
             initialTagsMap[tag] =
@@ -73,7 +79,7 @@ export default function HomePage() {
       <Page>
         <div className={styles.Heading}>
           <Text variant="headingMd" as="h1" fontWeight="regular">
-            Dashboard
+            Products Overview
           </Text>
         </div>
         {showBanner ? (
@@ -105,7 +111,7 @@ export default function HomePage() {
                     </Text>
                   </div>
                   <Stack spacing="extraLoose">
-                    {products.slice(0, 4)?.map((product) => (
+                    {dummyProducts.slice(0, 4)?.map((product) => (
                       <SingleProductCard
                         key={product.id}
                         image={product.image}

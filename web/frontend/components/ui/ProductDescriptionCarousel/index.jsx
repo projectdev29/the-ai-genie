@@ -10,6 +10,11 @@ import AlertCircle from "../../../assets/Icons/AlertCircle";
 import CheckmarkCircle from "../../../assets/Icons/CheckmarkCircle";
 import FloppyDisk from "../../../assets/Icons/FloppyDisk";
 import PaperPlane from "../../../assets/Icons/PaperPlane";
+import { BackendApiHelper } from "../../../../middleware/backendapihelper";
+import { useAuthenticatedFetch } from "../../../hooks";
+import { ShopifyApiHelper } from "../../../../middleware/shopifyapihelper";
+import ProductContext from "../../../pages/ProductContext";
+import { useContext } from "react";
 
 function Icon({ Src, color }) {
   return (
@@ -50,24 +55,138 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function SelectedProductDetails({ product }) {
+export function SelectedProductDetails() {
   const { classes } = useStyles();
+  const authFetch = useAuthenticatedFetch();
+  const productContext = useContext(ProductContext);
+
+  const updateProductInShopifyAdmin = useCallback(async () => {
+    console.log("here");
+    let resp = await authFetch("/api/products/description", {
+      method: "PUT",
+      body: JSON.stringify({
+        id: productContext.product.id,
+        body_html:
+          productContext.product.reviews[productContext.product.reviewIndex],
+      }),
+      headers: { "Content-Type": "application/json" },
+    });
+    console.log(resp);
+  }, [productContext.product]);
+
+  const updateProductsFromStoreWithCurrentProduct = useCallback(
+    async (newReviews, newDescription) => {
+      productContext.setProductsFromStore((prevValue) => {
+        let newProducts = [...prevValue.products];
+        let index = newProducts.findIndex(
+          (p) => p.id === productContext.product.id
+        );
+        newProducts[index] = {
+          ...newProducts[index],
+          description: newDescription,
+          reviews: newReviews,
+        };
+        //potentially cache it
+        return {
+          products: newProducts,
+        };
+      });
+    },
+    [productContext.product]
+  );
+  const updateProductDescription = useCallback(
+    async (productIndex) => {
+      // await updateProductInShopifyAdmin();
+      let descriptionSuggestions =
+        productContext.descriptionSuggestions[productIndex];
+      let descToUpdate = descriptionSuggestions.suggestionIndex
+        ? descriptionSuggestions.suggestions[
+            descriptionSuggestions.suggestionIndex
+          ]
+        : descriptionSuggestions.suggestions[0];
+      productContext.setProduct((prevValue) => {
+        return {
+          ...prevValue,
+          description: descToUpdate,
+        };
+      });
+      // set description in product from store
+      productContext.setProductsFromStore((prevValue) => {
+        let newProductsFromStore = { ...prevValue };
+        newProductsFromStore.products[productIndex] = {
+          ...newProductsFromStore.products[productIndex],
+          description: descToUpdate,
+        };
+        return newProductsFromStore;
+      });
+
+      //setproductsfromstore
+      // setproductsfromdb
+    },
+    [productContext.product, productContext.descriptionSuggestions]
+  );
+
+  const handleGenerateAlternateDescriptions = useCallback(async () => {
+    const copyResult = await BackendApiHelper.doPost(
+      "/api/generatecopyforproduct",
+      { product: productContext.product }
+    );
+    let newSuggestions = [copyResult.result];
+
+    let index = productContext.descriptionSuggestions.findIndex(
+      (p) => p.productId === productContext.product.id
+    );
+    let newDescriptionSuggestions = [...productContext.descriptionSuggestions];
+
+    //product already exists in suggestions
+    if (index >= 0) {
+      newSuggestions = [
+        ...newDescriptionSuggestions[index].suggestions,
+        copyResult.result,
+      ];
+      newDescriptionSuggestions[index] = {
+        productId: productContext.product.id,
+        suggestions: newSuggestions,
+      };
+    } else {
+      let newDescriptionSuggestion = {
+        productId: productContext.product.id,
+        suggestions: newSuggestions,
+      };
+      newDescriptionSuggestions.push(newDescriptionSuggestion);
+    }
+
+    productContext.setDescriptionSuggestions(newDescriptionSuggestions);
+    //probably not needed
+    //updateProductsFromStoreWithCurrentProduct(newReviews, product.description);
+  });
+
+  let productIndex = productContext.descriptionSuggestions.findIndex(
+    (p) => p.productId === productContext.product.id
+  );
 
   return (
     <div>
       <div className={classes.GenerateCard}>
         <Card.Section>
           <Stack distribution="equalSpacing">
-            <h3 className={classes.Heading}>{product.name}</h3>
+            <h3 className={classes.Heading}>{productContext.product.name}</h3>
             <Icon
-              Src={icons[product.tag].source}
-              color={icons[product.tag].color}
+              Src={icons[productContext.product.tag].source}
+              color={icons[productContext.product.tag].color}
             />
           </Stack>
           <Stack spacing="loose" vertical>
-            <p className={classes.SubHeading}>{product.description}</p>
+            <p className={classes.SubHeading}>
+              {productContext.product.description}
+            </p>
             <Stack wrap={false}>
-              <Button style={{ backgroundColor: "#008080" }}>Generate</Button>
+              <Button
+                style={{ backgroundColor: "#008080" }}
+                onClick={handleGenerateAlternateDescriptions}
+              >
+                Generate Alt. Copy
+              </Button>
               <Button variant="subtle">Mark As Reviewed</Button>
               <Button variant="subtle">Save For Later</Button>
             </Stack>
@@ -77,20 +196,27 @@ export function SelectedProductDetails({ product }) {
       <Card.Section>
         <Stack alignment="center" distribution="fillEvenly">
           <Text my="lg" fz="lg">
-            Generated Results
+            Generated Suggestions
           </Text>
           <Text my="lg" fz="xs" c="dimmed" ta="right">
             Showing 1 of 5 Suggestions
           </Text>
         </Stack>
-        <ProductDescriptionCarousel reviews={product.reviews} />
+        <ProductDescriptionCarousel
+          updateProductsFromStoreWithCurrentProduct={
+            updateProductsFromStoreWithCurrentProduct
+          }
+        />
         <div className={classes.ButtonGroup}>
           <Button
-            primary
+            // primary
             className={classes.Button}
-            disabled={!product.reviews}
+            disabled={productIndex < 0}
+            onClick={() => {
+              updateProductDescription(productIndex);
+            }}
           >
-            Update Product
+            Use This Description
           </Button>
         </div>
       </Card.Section>
@@ -98,24 +224,29 @@ export function SelectedProductDetails({ product }) {
   );
 }
 
-export function ProductDescriptionCarousel({ reviews }) {
-  const [sReviews, setSReviews] = useState();
-
-  useEffect(() => {
-    setSReviews(reviews);
-  }, [reviews]);
-
+export function ProductDescriptionCarousel({
+  updateProductsFromStoreWithCurrentProduct,
+}) {
+  const productContext = useContext(ProductContext);
   const handleChangeReview = useCallback(
-    (index) => (value) => {
-      setSReviews((prevSReviews) => {
-        const newSReviews = [...prevSReviews];
-        newSReviews[index] = value;
-        return newSReviews;
+    (index, productIndex) => (value) => {
+      productContext.setDescriptionSuggestions((prevValue) => {
+        const newDescriptionSuggestions = [...prevValue];
+        let newSuggestions = [
+          ...newDescriptionSuggestions[productIndex].suggestions,
+        ];
+        newSuggestions[index] = value;
+        newDescriptionSuggestions[productIndex].suggestions = newSuggestions;
+        newDescriptionSuggestions[productIndex].suggestionIndex = index;
+        return newDescriptionSuggestions;
       });
     },
-    []
+    [productContext.product]
   );
 
+  let productIndex = productContext.descriptionSuggestions.findIndex(
+    (p) => p.productId === productContext.product.id
+  );
   return (
     <Carousel
       slideSize="100%"
@@ -124,25 +255,27 @@ export function ProductDescriptionCarousel({ reviews }) {
       controlSize={40}
       align="center"
     >
-      {sReviews ? (
-        sReviews.map((sReview, index) => (
-          <Carousel.Slide key={index}>
-            <div className={styles.TextField}>
-              <TextField
-                value={sReview}
-                onChange={handleChangeReview(index)}
-                multiline={4}
-                autoComplete="off"
-              />
-            </div>
-          </Carousel.Slide>
-        ))
+      {productIndex >= 0 ? (
+        productContext.descriptionSuggestions[productIndex].suggestions.map(
+          (sReview, index) => (
+            <Carousel.Slide key={index}>
+              <div className={styles.TextField}>
+                <TextField
+                  value={sReview}
+                  onChange={handleChangeReview(index, productIndex)}
+                  multiline={6}
+                  autoComplete="off"
+                />
+              </div>
+            </Carousel.Slide>
+          )
+        )
       ) : (
         <Carousel.Slide>
           <div className={styles.TextField}>
             <TextField
-              placeholder={`Click “Generate” button above to generate new description suggestions. You can edit suggestions using this text area. Click side arrows to see next or previous suggestion. Once done click "Update Product" to save changes.`}
-              multiline={4}
+              placeholder={`Click “Generate” button above to generate new description suggestions. You can edit suggestions using this text area. Click side arrows to see next or previous suggestion. Once done click "Use This Description" to save changes.`}
+              multiline={6}
               autoComplete="off"
               disabled
             />

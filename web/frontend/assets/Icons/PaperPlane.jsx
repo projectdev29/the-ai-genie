@@ -6,8 +6,8 @@ function PaperPlane(props) {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 512 512"
-      width="12"
-      height="12"
+      width="15"
+      height="15"
       fill="none"
       stroke="currentColor"
       strokeLinecap="round"
